@@ -1,9 +1,10 @@
 # cityHack
 
-pip install streamlit
-pip install scikit-learn
+# Installation
+`pip install streamlit`
+`pip install scikit-learn`
 
-
+# Usage
 Run 
-streamlit run covidivisor.py
+`streamlit run covidivisor.py`
 

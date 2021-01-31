@@ -1,6 +1,5 @@
 import streamlit as st 
 import numpy as np 
-import matplotlib.pyplot as plt
 from sklearn import datasets
 from sklearn.model_selection import train_test_split
 from sklearn.decomposition import PCA
@@ -11,6 +10,8 @@ from sklearn.metrics import accuracy_score
 import Feedback
 import Model
 import pandas as pd
+from PIL import Image
+
 
 
 def main():
@@ -64,20 +65,31 @@ def main():
         user_answers = [breathingAnswer,feverAnswer,dryCoughAnswer,soreThroatAnswer,runningNoseAnswer,asthmaAnswer,chronicLungDiseaseAnswer,headacheAnswer,heartDiseaseAnswer,diabetesAnswer,hyperTensionAnswer,fatigueAnswer,gastrointestinalAnswer,abroadTravelAnswer,contactWithCOVIDPatientAnswer,attendedLargeGatheringAnswer,visitedPublicExposedPlacesAnswer,familyWorkingInPublicExposedPlacesAnswer]
 
         if st.button("Get Checked"):
+            
             page = "Home"
-            st.success(f'Results submitted. ')
+            st.success(f'Results submitted. Go to View Data page for detailed report')
             pos, neg = Model.test(rand_forest, Model.answer_conversion(user_answers))
             suggestedFeedback = Feedback.feedback(pos)
             st.write(f'You have {int(pos)} % of catching the Novel Coronavirus (COVID-19)')
             st.write(f'Feedback: {suggestedFeedback}')
+            but = st.button("View Detail Results")
+            # if but:
+            #     page = 'View Data'
             # if st.button("Check your detailed report"):
 
     elif page == 'Home':
-        st.title('We are a team of UST students')
+        st.title('COVIDvisor')
+        
+        st.write(""" 
+            ## dedicated to providing an accurate pre-screening and initial diagnosis service for users with common illnesses in order to minimise unnecessary social contacts and the pressure of public hospitals.
+            """)
+        image = Image.open('doctor_image.jpg')
+        st.image(image, use_column_width=True)
+        st.write('Our solution is a machine learning (web) application that provides users with an accurate preliminary diagnosis given their input of symptoms currently experienced. The algorithm will suggest 3 top illnesses with the highest likelihood and for each illness, also giving the proper treatment methods and guidelines. ')
         
 
     elif page == 'View Data':
-        st.title('Result')
+        st.title('Your Result')
         col1,col2 = st.beta_columns(2)
         with col1:
             st.header('What should I do?')
@@ -87,7 +99,7 @@ def main():
                 test for COVID in one of the following locations. In the meantime, stay hydrated and get enough rest,
                 and be sure to notify your family and friends.
             ''')
-            # st.image("https://static.streamlit.io/examples/cat.jpg", use_column_width=True)
+            
             st.subheader('Key symptoms you had related to COVID-19')
             st.write('**Fever**')
             st.write('''
@@ -107,7 +119,7 @@ def main():
 
 
         with col2:
-            st.header('Your risk level is:')
+            st.header('Your risk level is **92%**:')
             riskLevel = st.select_slider(
                 '',
             options=['Low', 'Medium','High'],value='High')
@@ -129,7 +141,8 @@ def main():
             st.write('**Hotline**: 3611 1301 / 3611 1302')
             st.write('**Email**: COVID_Enquiry@hk-mpdc.com')
     else:
-        st.title('About')
+        st.title('Further development')
+        st.write('Our application \'s position is to detect common illnesses as a starting point. However, with our application proven to be an effective tool for pre-screening / preliminary diagnosis, we can partner with the Hong Kong Government\'s  eHealth (醫健通) programme to allow users to import / link their medical history, further increasing the accuracy of the diagnosis results')
 
 
 if __name__ == "__main__":
